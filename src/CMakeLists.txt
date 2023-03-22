@@ -73,6 +73,7 @@ set(OPENSPACE_SOURCE
   navigation/navigationhandler_lua.inl
   navigation/navigationstate.cpp
   navigation/orbitalnavigator.cpp
+  navigation/othernavigator.cpp
   navigation/path.cpp
   navigation/pathcurve.cpp
   navigation/pathnavigator.cpp
@@ -255,6 +256,7 @@ set(OPENSPACE_HEADER
   ${PROJECT_SOURCE_DIR}/include/openspace/navigation/navigationhandler.h
   ${PROJECT_SOURCE_DIR}/include/openspace/navigation/navigationstate.h
   ${PROJECT_SOURCE_DIR}/include/openspace/navigation/orbitalnavigator.h
+  ${PROJECT_SOURCE_DIR}/include/openspace/navigation/othernavigator.h
   ${PROJECT_SOURCE_DIR}/include/openspace/navigation/path.h
   ${PROJECT_SOURCE_DIR}/include/openspace/navigation/pathcurve.h
   ${PROJECT_SOURCE_DIR}/include/openspace/navigation/pathnavigator.h

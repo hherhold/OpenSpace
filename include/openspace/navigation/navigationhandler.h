@@ -33,6 +33,7 @@
 #include <openspace/navigation/keyframenavigator.h>
 #include <openspace/navigation/navigationstate.h>
 #include <openspace/navigation/orbitalnavigator.h>
+#include <openspace/navigation/othernavigator.h>
 #include <openspace/navigation/pathnavigator.h>
 #include <openspace/properties/propertyowner.h>
 #include <openspace/properties/stringproperty.h>
@@ -56,6 +57,7 @@ struct NavigationState;
 struct WebsocketInputStates;
 class KeyframeNavigator;
 class OrbitalNavigator;
+class OtherNavigator;
 class PathNavigator;
 
 class NavigationHandler : public properties::PropertyOwner {
@@ -82,6 +84,8 @@ public:
     const KeyboardInputState& keyboardInputState() const;
     const OrbitalNavigator& orbitalNavigator() const;
     OrbitalNavigator& orbitalNavigator();
+    const OtherNavigator& otherNavigator() const;
+    OtherNavigator& otherNavigator();
     KeyframeNavigator& keyframeNavigator();
     PathNavigator& pathNavigator();
     bool isKeyFrameInteractionEnabled() const;
@@ -168,6 +172,7 @@ private:
     bool _inAnchorReachSphere = false;
 
     OrbitalNavigator _orbitalNavigator;
+    OtherNavigator _otherNavigator;
     KeyframeNavigator _keyframeNavigator;
     PathNavigator _pathNavigator;
 

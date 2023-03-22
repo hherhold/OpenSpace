@@ -96,6 +96,7 @@ NavigationHandler::NavigationHandler()
     , _useKeyFrameInteraction(FrameInfo, false)
 {
     addPropertySubOwner(_orbitalNavigator);
+    addPropertySubOwner(_otherNavigator);
     addPropertySubOwner(_pathNavigator);
 
     addProperty(_disableKeybindings);
@@ -146,6 +147,14 @@ OrbitalNavigator& NavigationHandler::orbitalNavigator() {
 
 const OrbitalNavigator& NavigationHandler::orbitalNavigator() const {
     return _orbitalNavigator;
+}
+
+OtherNavigator& NavigationHandler::otherNavigator() {
+    return _otherNavigator;
+}
+
+const OtherNavigator& NavigationHandler::otherNavigator() const {
+    return _otherNavigator;
 }
 
 KeyframeNavigator& NavigationHandler::keyframeNavigator() {
