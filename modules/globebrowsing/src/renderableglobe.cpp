@@ -34,6 +34,8 @@
 #include <openspace/documentation/documentation.h>
 #include <openspace/documentation/verifier.h>
 #include <openspace/engine/globals.h>
+#include <openspace/events/event.h>
+#include <openspace/events/eventengine.h>
 #include <openspace/interaction/sessionrecording.h>
 #include <openspace/rendering/renderengine.h>
 #include <openspace/scene/scenegraphnode.h>
@@ -1011,6 +1013,38 @@ void RenderableGlobe::update(const UpdateData& data) {
     _layerManagerDirty = true;
 
     _geoJsonManager.update();
+
+    // Shadow mapping based on depth maps depend on the number of depthmaps
+    // in use, which is a compile-time define. Therefore we need to rebuild shaders
+    // when this changes.
+    const events::Event* e = global::eventEngine->firstEvent();
+    while (e) {
+        switch (e->type) {
+            case events::Event::Type::SceneGraphNodeAdded:
+            case events::Event::Type::SceneGraphNodeRemoved:
+                size_t prevSize = _shadowers.size();
+                _shadowers = getShadowers(this->parent());
+                if (prevSize != _shadowers.size()) {
+                    _shadowersUpdated = true;
+                    _shadowersOk = false;
+                }
+                break;
+        }
+        e = e->next;
+    }
+
+    // Note that recompilation only occurs when all models are loaded and ready for rendering
+    if (_shadowersUpdated) {
+        bool allOK = true;
+        for (const RenderableModel* model : _shadowers) {
+            allOK &= model->isReady();
+        }
+        if (allOK) {
+            _shadowersUpdated = false;
+            _shadowersOk = true;
+            _shadersNeedRecompilation = true;
+        }
+    }
 }
 
 bool RenderableGlobe::renderedWithDesiredData() const {
@@ -1270,10 +1304,11 @@ void RenderableGlobe::renderChunks(const RenderData& data, RendererTasks&,
         _globalRenderer.program->setIgnoreUniformLocationError(IgnoreError::Yes);
     }
 
-    std::vector<const RenderableModel*> shadowers = shadowingChildren(this->parent());
     std::vector<RenderableModel::DepthMapData> depthMapData;
-    for (const RenderableModel* model : shadowers) {
-        depthMapData.push_back(model->renderDepthMap());
+    for (const RenderableModel* model : _shadowers) {
+        if (model->isReady()) {
+            depthMapData.push_back(model->renderDepthMap());
+        }
     }
 
     int globalCount = 0;
@@ -1596,20 +1631,25 @@ void RenderableGlobe::renderChunkLocally(const Chunk& chunk, const RenderData& d
 
 
     std::vector<glm::dmat4> light_vps;
-    std::vector<GLint> depthmaps;
+    std::vector<std::pair<ghoul::opengl::TextureUnit, GLuint>> depthmapTextureUnits;
     for (const RenderableModel::DepthMapData& data : depthMapData) {
         light_vps.push_back(data.viewProjecion);
-        ghoul::opengl::TextureUnit unit;
-        depthmaps.push_back(unit);
-        unit.activate();
-        glBindTexture(GL_TEXTURE_2D, depthMapData[0].depthMap);
+        depthmapTextureUnits.emplace_back(ghoul::opengl::TextureUnit(), data.depthMap);
     }
 
-    _localRenderer.program->setUniform("inv_vp", glm::inverse(data.camera.combinedViewMatrix()));
-    _localRenderer.program->setUniform("n_depthmaps", static_cast<int>(depthMapData.size()));
-    _localRenderer.program->setUniform("light_depth_maps", depthmaps);
-    GLint loc = glGetUniformLocation(*_localRenderer.program, "light_vps");
-    glUniformMatrix4dv(loc, light_vps.size(), GL_FALSE, glm::value_ptr(light_vps.front()));
+    std::vector<GLint> bound_units;
+    for (auto& [unit, depthMap] : depthmapTextureUnits) {
+        unit.activate();
+        glBindTexture(GL_TEXTURE_2D, depthMap);
+        bound_units.push_back(unit);
+    }
+
+    if (_shadowers.size() > 0 && _shadowersOk) {
+        _localRenderer.program->setUniform("inv_vp", glm::inverse(data.camera.combinedViewMatrix()));
+        _localRenderer.program->setUniform("light_depth_maps", bound_units);
+        GLint loc = glGetUniformLocation(*_localRenderer.program, "light_vps");
+        glUniformMatrix4dv(loc, light_vps.size(), GL_FALSE, glm::value_ptr(light_vps.front()));
+    }
 
     glEnable(GL_DEPTH_TEST);
     if (!renderGeomOnly) {
@@ -1889,6 +1929,7 @@ void RenderableGlobe::recompileShaders() {
 
     // Local shader uses depthmap shadows
     shaderDictionary.setValue("useDepthmapShadows", 1);
+    shaderDictionary.setValue("nDepthMaps", static_cast<int>(_shadowers.size()));
     //
     // Create local shader
     //
@@ -2603,7 +2644,7 @@ void RenderableGlobe::freeChunkNode(Chunk* n) {
     n->children.fill(nullptr);
 }
 
-std::vector<const RenderableModel*> RenderableGlobe::shadowingChildren(const SceneGraphNode* node) {
+std::vector<const RenderableModel*> RenderableGlobe::getShadowers(const SceneGraphNode* node) {
 	std::vector<const RenderableModel*> shadowers;
 
 	if (node) {
@@ -2613,7 +2654,7 @@ std::vector<const RenderableModel*> RenderableGlobe::shadowingChildren(const Sce
 		}
 
 		for (const SceneGraphNode* child : node->children()) {
-			std::vector<const RenderableModel*> res = shadowingChildren(child);
+			std::vector<const RenderableModel*> res = getShadowers(child);
 			shadowers.insert(shadowers.end(), res.begin(), res.end());
 		}
 	}
