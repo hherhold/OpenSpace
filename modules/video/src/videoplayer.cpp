@@ -500,6 +500,11 @@ void VideoPlayer::update() {
         return;
     }
 
+    if (_preventMultipleUpdatesSemaphore) {
+        _preventMultipleUpdatesSemaphore = false;
+        return;
+    }
+
     if (global::sessionRecording->isSavingFramesDuringPlayback()) {
         double dt = global::sessionRecording->fixedDeltaTimeDuringFrameOutput();
         if (_playbackMode == PlaybackMode::MapToSimulationTime) {
@@ -512,12 +517,11 @@ void VideoPlayer::update() {
         MpvKey key = MpvKey::Time;
         mpv_set_property(_mpvHandle, keys[key], formats[key], &_currentVideoTime);
 
-        uint64_t result = mpv_render_context_update(_mpvRenderContext);
-        while ((result & MPV_RENDER_UPDATE_FRAME) == 0) {
-            renderFrame();
-
+        uint64_t result;
+        do {
             result = mpv_render_context_update(_mpvRenderContext);
-        }
+        } while ((result & MPV_RENDER_UPDATE_FRAME) == 0);
+        renderFrame();
         return;
     }
 
@@ -800,6 +804,8 @@ void VideoPlayer::postSync(bool isMaster) {
             seekToTime(_correctPlaybackTime, PauseAfterSeek(isMappingTime));
         }
     }
+
+    _preventMultipleUpdatesSemaphore = true;
 }
 
 const std::unique_ptr<ghoul::opengl::Texture>& VideoPlayer::frameTexture() const {
