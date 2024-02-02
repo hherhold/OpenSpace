@@ -494,7 +494,7 @@ OrbitalNavigator::OrbitalNavigator()
     , _retargetAnchor(RetargetAnchorInfo)
     , _retargetAim(RetargetAimInfo)
     , _followAnchorNodeRotation(FollowAnchorNodeInfo, true)
-    , _followAnchorNodeRotationDistance(FollowAnchorNodeDistanceInfo, 5.f, 0.f, 20.f)
+    , _followAnchorNodeRotationDistance(FollowAnchorNodeDistanceInfo, 5.f, 0.f, 20000.f)
     , _disableZoom(DisableZoomInfo, false)
     , _disableRoll(DisableRollInfo, false)
     , _mouseSensitivity(MouseSensitivityInfo, 15.f, 1.f, 50.f)
@@ -1242,22 +1242,13 @@ bool OrbitalNavigator::shouldFollowAnchorRotation(const glm::dvec3& cameraPositi
         return false;
     }
 
-    const glm::dmat4 modelTransform = _anchorNode->modelTransform();
-    const glm::dmat4 inverseModelTransform = glm::inverse(modelTransform);
-    const glm::dvec3 cameraPositionModelSpace = glm::dvec3(inverseModelTransform *
-        glm::dvec4(cameraPosition, 1.0));
-
-    const SurfacePositionHandle positionHandle =
-        _anchorNode->calculateSurfacePositionHandle(cameraPositionModelSpace);
-
-    const double maximumDistanceForRotation = glm::length(
-        glm::dmat3(modelTransform) * positionHandle.centerToReferenceSurface
-    ) * _followAnchorNodeRotationDistance;
-
     const double distanceToCamera =
         glm::distance(cameraPosition, _anchorNode->worldPosition());
-    bool shouldFollow = distanceToCamera < maximumDistanceForRotation;
-    return shouldFollow;
+
+    if (_anchorNode->followRotationDistance() < 0.) {
+        return distanceToCamera < _followAnchorNodeRotationDistance;
+    }
+    return distanceToCamera < _anchorNode->followRotationDistance();
 }
 
 bool OrbitalNavigator::followingAnchorRotation() const {
