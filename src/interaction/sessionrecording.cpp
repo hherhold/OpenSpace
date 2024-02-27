@@ -2707,6 +2707,14 @@ void SessionRecording::binary2ascii(const std::string& filename) {
     }
 }
 
+void SessionRecording::setOverrideRecordingStereoDepth(bool value) {
+    _overrideRecordingStereoDepth = value;
+}
+
+const bool SessionRecording::shouldOverrideRecordingStereoDepth() const {
+    return _overrideRecordingStereoDepth;
+}
+
 bool SessionRecording_legacy_0085::convertScript(std::stringstream& inStream,
                                                  DataMode mode, int lineNum,
                                                  std::string& inputLine,
@@ -2748,7 +2756,8 @@ scripting::LuaLibrary SessionRecording::luaLibrary() {
             codegen::lua::SetPlaybackPause,
             codegen::lua::TogglePlaybackPause,
             codegen::lua::IsPlayingBack,
-            codegen::lua::Binary2ascii
+            codegen::lua::Binary2ascii,
+            codegen::lua::SetOverrideRecordingStereoDepth
         }
     };
 }
