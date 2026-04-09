@@ -236,7 +236,8 @@ protected:
         cmapRangeMin, cmapRangeMax, nanColor, useNanColor, hideOutsideRange,
         enableMaxSizeControl, aboveRangeColor, useAboveRangeColor, belowRangeColor,
         useBelowRangeColor, hasDvarScaling, dvarScaleFactor, enableOutline, outlineColor,
-        outlineWeight, outlineStyle, useCmapOutline, aspectRatioScale, useOrientationData
+        outlineWeight, outlineStyle, useCmapOutline, aspectRatioScale, useOrientationData,
+        discreteColors, numColormapEntries
     ) _uniformCache;
 
     std::filesystem::path _dataFile;

@@ -1237,6 +1237,11 @@ void RenderablePointCloud::renderPoints(const RenderData& data,
         _colorSettings.colorMapping->texture();
 
     _program->setUniform(_uniformCache.useColorMap, useColorMap);
+    _program->setUniform(_uniformCache.discreteColors,
+        useColorMap && _colorSettings.colorMapping->discreteColors);
+    _program->setUniform(_uniformCache.numColormapEntries,
+        useColorMap ?
+            static_cast<int>(_colorSettings.colorMapping->texture()->dimensions().x) : 1);
 
     ghoul::opengl::TextureUnit colorMapTextureUnit;
     _program->setUniform(_uniformCache.colorMapTexture, colorMapTextureUnit);

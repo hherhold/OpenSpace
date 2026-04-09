@@ -1,0 +1,49 @@
+-- Discrete Color Mapping
+-- This example creates a point cloud where each point is assigned a color based on an
+-- integer category value in the dataset, with no interpolation between colors.
+--
+-- The "category" column in the CSV contains values 0-4, each corresponding to one of
+-- five distinct object types. With DiscreteColors enabled, value 0 maps directly to the
+-- first entry in the color map, value 1 to the second, and so on:
+--
+--   0 = Red    (stars)
+--   1 = Green  (nebulae)
+--   2 = Blue   (galaxies)
+--   3 = Orange (clusters)
+--   4 = Purple (quasars)
+--
+-- This is different from the normal color mapping mode, which normalizes the data value
+-- to a [0, 1] range and interpolates between colors. In discrete mode, only integer
+-- indices are meaningful and the ValueRange setting is ignored.
+
+local Node = {
+  Identifier = "RenderablePointCloud_Example_DiscreteColors",
+  Renderable = {
+    Type = "RenderablePointCloud",
+    File = asset.resource("data/discrete_categories.csv"),
+    Coloring = {
+      ColorMapping = {
+        File = asset.resource("data/discrete_categories.cmap"),
+        Parameter = "category",
+        -- Enable discrete mode: the integer value in the "category" column is used as a
+        -- 0-based index directly into the color map, with no interpolation.
+        DiscreteColors = true
+      }
+    },
+    SizeSettings = {
+      ScaleExponent = 7.0
+    }
+  },
+  GUI = {
+    Name = "RenderablePointCloud - Discrete Colors",
+    Path = "/Examples"
+  }
+}
+
+asset.onInitialize(function()
+  openspace.addSceneGraphNode(Node)
+end)
+
+asset.onDeinitialize(function()
+  openspace.removeSceneGraphNode(Node)
+end)

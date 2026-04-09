@@ -52,6 +52,8 @@ uniform sampler1D colorMapTexture;
 uniform float cmapRangeMin;
 uniform float cmapRangeMax;
 uniform bool hideOutsideRange;
+uniform bool discreteColors = false;
+uniform int numColormapEntries = 1;
 uniform bool enableOutline;
 uniform vec3 outlineColor;
 uniform float outlineWeight;
@@ -69,6 +71,11 @@ const int OutlineStyleBottom = 2;
 vec4 sampleColorMap(float dataValue) {
   if (useNanColor && isnan(dataValue)) {
     return nanColor;
+  }
+
+  if (discreteColors) {
+    int idx = clamp(int(round(dataValue)), 0, numColormapEntries - 1);
+    return texelFetch(colorMapTexture, idx, 0);
   }
 
   bool isOutside = dataValue < cmapRangeMin || dataValue > cmapRangeMax;

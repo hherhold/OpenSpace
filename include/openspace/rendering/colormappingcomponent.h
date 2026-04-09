@@ -84,6 +84,7 @@ public:
 
     BoolProperty enabled;
     BoolProperty invert;
+    BoolProperty discreteColors;
     OptionProperty dataColumn;
     StringProperty colorMapFile;
     Vec2Property valueRange;

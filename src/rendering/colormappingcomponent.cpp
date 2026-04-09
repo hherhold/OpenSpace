@@ -151,6 +151,17 @@ namespace {
         Property::Visibility::AdvancedUser
     };
 
+    constexpr Property::PropertyInfo DiscreteColorsInfo = {
+        "DiscreteColors",
+        "Discrete colors",
+        "If true, the value from the data column is interpreted as a 0-based integer "
+        "index directly into the color map entries, rather than being normalized and "
+        "interpolated. This allows each point to be assigned one of a fixed set of "
+        "colors, for example to color-code discrete categories. Values that are out of "
+        "range are clamped to the nearest valid color entry.",
+        Property::Visibility::User
+    };
+
     // This component handles settings for dynamic color mapping of data points based on
     // the columns in a dataset. It is for example utilized by the
     // [RenderablePointCloud](#base_renderable_pointcloud) renderable type.
@@ -225,6 +236,9 @@ namespace {
 
         // [[codegen::verbatim(InvertColorMapInfo.description)]]
         std::optional<bool> invert;
+
+        // [[codegen::verbatim(DiscreteColorsInfo.description)]]
+        std::optional<bool> discreteColors;
     };
 } // namespace
 #include "colormappingcomponent_codegen.cpp"
@@ -239,6 +253,7 @@ ColorMappingComponent::ColorMappingComponent()
     : PropertyOwner({ "ColorMapping", "Color Mapping", "" })
     , enabled(EnabledInfo, true)
     , invert(InvertColorMapInfo, false)
+    , discreteColors(DiscreteColorsInfo, false)
     , dataColumn(ParameterInfo)
     , colorMapFile(FileInfo)
     , valueRange(RangeInfo, glm::vec2(0.f))
@@ -277,6 +292,7 @@ ColorMappingComponent::ColorMappingComponent()
         _colorMapTextureIsDirty = true;
     });
     addProperty(invert);
+    addProperty(discreteColors);
 
     addProperty(hideOutsideRange);
     addProperty(useNanColor);
@@ -344,6 +360,7 @@ ColorMappingComponent::ColorMappingComponent(const ghoul::Dictionary& dictionary
     colorMapFile = p.file.string();
 
     invert = p.invert.value_or(invert);
+    discreteColors = p.discreteColors.value_or(discreteColors);
 }
 
 ghoul::opengl::Texture* ColorMappingComponent::texture() const {
