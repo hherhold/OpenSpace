@@ -1,0 +1,38 @@
+-- Spline interpolation
+-- Same dataset as the basic example, but with Catmull-Rom spline interpolation enabled.
+-- The motion between the keyframes curves smoothly rather than passing through each
+-- keyframe with a hard direction change.
+
+local Node = {
+  Identifier = "RenderableInterpolatedConstellationLines_Example_Spline",
+  Renderable = {
+    Type = "RenderableInterpolatedConstellationLines",
+    Files = {
+      asset.resource("data/constellations_t0.speck"),
+      asset.resource("data/constellations_t1.speck"),
+      asset.resource("data/constellations_t2.speck")
+    },
+    NamesFile = asset.resource("data/constellations_names.dat"),
+    Unit = "pc",
+    Colors = { { 0.8, 0.2, 0.2 }, { 0.2, 0.8, 0.2 } },
+    LineWidth = 2.0,
+    Interpolation = {
+      -- Smoothen transitions between the keyframes with a Catmull-Rom spline
+      UseSplineInterpolation = true,
+      Speed = 0.5
+    }
+  },
+  GUI = {
+    Name = "RenderableInterpolatedConstellationLines - Spline",
+    Path = "/Examples"
+  }
+}
+
+
+asset.onInitialize(function()
+  openspace.addSceneGraphNode(Node)
+end)
+
+asset.onDeinitialize(function()
+  openspace.removeSceneGraphNode(Node)
+end)

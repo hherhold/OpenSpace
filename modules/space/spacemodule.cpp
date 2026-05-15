@@ -29,6 +29,7 @@
 #include <modules/space/rendering/renderableeclipsecone.h>
 #include <modules/space/rendering/renderablefluxnodes.h>
 #include <modules/space/rendering/renderablehabitablezone.h>
+#include <modules/space/rendering/renderableinterpolatedconstellationlines.h>
 #include <modules/space/rendering/renderableorbitalkepler.h>
 #include <modules/space/rendering/renderablerings.h>
 #include <modules/space/rendering/renderablestars.h>
@@ -106,6 +107,9 @@ void SpaceModule::internalInitialize(const ghoul::Dictionary& dictionary) {
     fRenderable->registerClass<RenderableEclipseCone>("RenderableEclipseCone");
     fRenderable->registerClass<RenderableFluxNodes>("RenderableFluxNodes");
     fRenderable->registerClass<RenderableHabitableZone>("RenderableHabitableZone");
+    fRenderable->registerClass<RenderableInterpolatedConstellationLines>(
+        "RenderableInterpolatedConstellationLines"
+    );
     fRenderable->registerClass<RenderableRings>("RenderableRings");
     fRenderable->registerClass<RenderableOrbitalKepler>("RenderableOrbitalKepler");
     fRenderable->registerClass<RenderableStars>("RenderableStars");
@@ -151,6 +155,7 @@ std::vector<Documentation> SpaceModule::documentations() const {
         RenderableEclipseCone::Documentation(),
         RenderableFluxNodes::Documentation(),
         RenderableHabitableZone::Documentation(),
+        RenderableInterpolatedConstellationLines::Documentation(),
         RenderableRings::Documentation(),
         RenderableOrbitalKepler::Documentation(),
         RenderableStars::Documentation(),

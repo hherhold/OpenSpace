@@ -1,0 +1,26 @@
+# Synthetic constellation lines for the RenderableInterpolatedConstellationLines
+# example. Timestep 2 (final keyframe).
+
+mesh -c 1 {
+id TRI
+3
+5.0 -10.0 0.0
+15.0 20.0 -5.0
+25.0 -10.0 0.0
+}
+
+mesh -c 1 {
+id QUA
+4
+-30.0 5.0 5.0
+-10.0 5.0 -5.0
+-10.0 -5.0 5.0
+-30.0 -5.0 -5.0
+}
+
+mesh -c 2 {
+id LIN
+2
+0.0 10.0 10.0
+0.0 30.0 10.0
+}

@@ -31,6 +31,7 @@ set(HEADER_FILES
   rendering/renderableconstellationbounds.h
   rendering/renderableconstellationlines.h
   rendering/renderableeclipsecone.h
+  rendering/renderableinterpolatedconstellationlines.h
   rendering/renderablefluxnodes.h
   rendering/renderablehabitablezone.h
   rendering/renderablerings.h
@@ -54,6 +55,7 @@ set(SOURCE_FILES
   rendering/renderableconstellationbounds.cpp
   rendering/renderableconstellationlines.cpp
   rendering/renderableeclipsecone.cpp
+  rendering/renderableinterpolatedconstellationlines.cpp
   rendering/renderablefluxnodes.cpp
   rendering/renderablehabitablezone.cpp
   rendering/renderablerings.cpp
@@ -74,6 +76,7 @@ set(SHADER_FILES
   shaders/constellationbounds_vs.glsl
   shaders/constellationlines_fs.glsl
   shaders/constellationlines_vs.glsl
+  shaders/constellationlines_interpolated_vs.glsl
   shaders/eclipsecone_fs.glsl
   shaders/eclipsecone_vs.glsl
   shaders/fluxnodes_fs.glsl

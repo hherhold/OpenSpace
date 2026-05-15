@@ -1,0 +1,44 @@
+-- Basic
+-- This example creates a set of three synthetic constellation lines that interpolate
+-- between three keyframe configurations. Each keyframe is a complete SPECK file listing
+-- the same constellation identifiers; the renderable animates between them based on the
+-- `Interpolation.Value` property (or the convenience trigger properties).
+
+local Node = {
+  Identifier = "RenderableInterpolatedConstellationLines_Example",
+  Renderable = {
+    Type = "RenderableInterpolatedConstellationLines",
+    -- The order of files in this list defines the interpolation timesteps.
+    -- All files must declare the same constellation identifiers and the same number of
+    -- vertices per constellation.
+    Files = {
+      asset.resource("data/constellations_t0.speck"),
+      asset.resource("data/constellations_t1.speck"),
+      asset.resource("data/constellations_t2.speck")
+    },
+    -- Maps abbreviations (the `id` lines in the SPECK files) to full names that show up
+    -- in the user interface and selection list.
+    NamesFile = asset.resource("data/constellations_names.dat"),
+    Unit = "pc",
+    -- Two colors, used for the constellations based on their `-c` color index.
+    Colors = { { 0.8, 0.2, 0.2 }, { 0.2, 0.8, 0.2 } },
+    LineWidth = 2.0,
+    Interpolation = {
+      -- One timestep takes 2 seconds when using the interpolate triggers
+      Speed = 0.5
+    }
+  },
+  GUI = {
+    Name = "RenderableInterpolatedConstellationLines - Basic",
+    Path = "/Examples"
+  }
+}
+
+
+asset.onInitialize(function()
+  openspace.addSceneGraphNode(Node)
+end)
+
+asset.onDeinitialize(function()
+  openspace.removeSceneGraphNode(Node)
+end)
