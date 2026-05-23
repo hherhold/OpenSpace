@@ -46,6 +46,8 @@ set(HEADER_FILES
   rendering/grids/renderablegrid.h
   rendering/grids/renderableradialgrid.h
   rendering/grids/renderablesphericalgrid.h
+  rendering/linesegments/renderableinterpolatedlinesegments.h
+  rendering/linesegments/renderablelinesegments.h
   rendering/pointcloud/renderableinterpolatedpoints.h
   rendering/pointcloud/renderablepointcloud.h
   rendering/pointcloud/renderablepolygoncloud.h
@@ -124,6 +126,8 @@ set(SOURCE_FILES
   rendering/grids/renderablegrid.cpp
   rendering/grids/renderableradialgrid.cpp
   rendering/grids/renderablesphericalgrid.cpp
+  rendering/linesegments/renderableinterpolatedlinesegments.cpp
+  rendering/linesegments/renderablelinesegments.cpp
   rendering/pointcloud/renderableinterpolatedpoints.cpp
   rendering/pointcloud/renderablepointcloud.cpp
   rendering/pointcloud/renderablepolygoncloud.cpp
@@ -192,6 +196,9 @@ set(SHADER_FILES
   shaders/grid_fs.glsl
   shaders/line_fs.glsl
   shaders/line_vs.glsl
+  shaders/linesegments/linesegments_fs.glsl
+  shaders/linesegments/linesegments_interpolated_vs.glsl
+  shaders/linesegments/linesegments_vs.glsl
   shaders/model_depth_fs.glsl
   shaders/model_depth_vs.glsl
   shaders/model_fs.glsl

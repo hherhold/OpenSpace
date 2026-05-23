@@ -45,6 +45,8 @@
 #include <modules/base/rendering/grids/renderablegrid.h>
 #include <modules/base/rendering/grids/renderableradialgrid.h>
 #include <modules/base/rendering/grids/renderablesphericalgrid.h>
+#include <modules/base/rendering/linesegments/renderableinterpolatedlinesegments.h>
+#include <modules/base/rendering/linesegments/renderablelinesegments.h>
 #include <modules/base/rendering/pointcloud/renderableinterpolatedpoints.h>
 #include <modules/base/rendering/pointcloud/renderablepointcloud.h>
 #include <modules/base/rendering/pointcloud/renderablepolygoncloud.h>
@@ -180,6 +182,10 @@ void BaseModule::internalInitialize(const ghoul::Dictionary&) {
     fRenderable->registerClass<RenderableDistanceLabel>("RenderableDistanceLabel");
     fRenderable->registerClass<RenderableGrid>("RenderableGrid");
     fRenderable->registerClass<RenderableLabel>("RenderableLabel");
+    fRenderable->registerClass<RenderableInterpolatedLineSegments>(
+        "RenderableInterpolatedLineSegments"
+    );
+    fRenderable->registerClass<RenderableLineSegments>("RenderableLineSegments");
     fRenderable->registerClass<RenderableModel>("RenderableModel");
     fRenderable->registerClass<RenderableNodeArrow>("RenderableNodeArrow");
     fRenderable->registerClass<RenderableNodeLine>("RenderableNodeLine");
@@ -289,8 +295,10 @@ std::vector<Documentation> BaseModule::documentations() const {
         RenderableDisc::Documentation(),
         RenderableDistanceLabel::Documentation(),
         RenderableGrid::Documentation(),
+        RenderableInterpolatedLineSegments::Documentation(),
         RenderableInterpolatedPoints::Documentation(),
         RenderableLabel::Documentation(),
+        RenderableLineSegments::Documentation(),
         RenderableModel::Documentation(),
         RenderableNodeArrow::Documentation(),
         RenderableNodeLine::Documentation(),

@@ -1,0 +1,38 @@
+-- Color Mapping
+-- This example creates a set of lines where the color is set from a color map, based on
+-- the "value" column in the dataset. The color is interpolated smoothly along each line.
+--
+-- Note that the color map is loaded from another asset. This is a utility asset that
+-- includes some common color maps for general usage.
+
+local colormaps = asset.require("util/default_colormaps")
+
+local Node = {
+  Identifier = "RenderableLineSegments_Example_ColorMapped",
+  Renderable = {
+    Type = "RenderableLineSegments",
+    File = asset.resource("data/lines.csv"),
+    LineIdentifierColumn = "line",
+    Unit = "pc",
+    Coloring = {
+      ColorMapping = {
+        File = colormaps.Uniform.Viridis,
+        Parameter = "value"
+      }
+    },
+    LineWidth = 2.0
+  },
+  GUI = {
+    Name = "RenderableLineSegments - Color Mapped",
+    Path = "/Examples"
+  }
+}
+
+
+asset.onInitialize(function()
+  openspace.addSceneGraphNode(Node)
+end)
+
+asset.onDeinitialize(function()
+  openspace.removeSceneGraphNode(Node)
+end)

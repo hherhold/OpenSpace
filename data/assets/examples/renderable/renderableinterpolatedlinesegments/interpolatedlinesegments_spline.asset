@@ -1,0 +1,42 @@
+-- Spline Interpolation
+-- This example is the same as the basic interpolated line segments example, but uses
+-- Catmull-Rom spline interpolation instead of linear interpolation. This leads to a
+-- smoother transition between the time steps. The color is also set from a color map,
+-- based on the "value" column, and the data values are interpolated as well.
+
+local colormaps = asset.require("util/default_colormaps")
+
+local Node = {
+  Identifier = "RenderableInterpolatedLineSegments_Example_Spline",
+  Renderable = {
+    Type = "RenderableInterpolatedLineSegments",
+    File = asset.resource("data/interpolation_lines.csv"),
+    LineIdentifierColumn = "line",
+    NumberOfObjects = 9,
+    Unit = "pc",
+    Coloring = {
+      ColorMapping = {
+        File = colormaps.Uniform.Viridis,
+        Parameter = "value"
+      }
+    },
+    LineWidth = 2.0,
+    Interpolation = {
+      UseSplineInterpolation = true,
+      Speed = 0.5
+    }
+  },
+  GUI = {
+    Name = "RenderableInterpolatedLineSegments - Spline",
+    Path = "/Examples"
+  }
+}
+
+
+asset.onInitialize(function()
+  openspace.addSceneGraphNode(Node)
+end)
+
+asset.onDeinitialize(function()
+  openspace.removeSceneGraphNode(Node)
+end)

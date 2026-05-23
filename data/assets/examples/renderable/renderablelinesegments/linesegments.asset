@@ -1,0 +1,32 @@
+-- Basic
+-- This example creates a set of lines from a CSV file. The "line" column is used as the
+-- line identifier, so consecutive rows that share the same value in that column are
+-- connected into a single continuous polyline.
+
+local Node = {
+  Identifier = "RenderableLineSegments_Example",
+  Renderable = {
+    Type = "RenderableLineSegments",
+    File = asset.resource("data/lines.csv"),
+    -- Group consecutive rows with the same value in the "line" column into polylines
+    LineIdentifierColumn = "line",
+    Unit = "pc",
+    Coloring = {
+      FixedColor = { 0.4, 0.8, 1.0 }
+    },
+    LineWidth = 2.0
+  },
+  GUI = {
+    Name = "RenderableLineSegments - Basic",
+    Path = "/Examples"
+  }
+}
+
+
+asset.onInitialize(function()
+  openspace.addSceneGraphNode(Node)
+end)
+
+asset.onDeinitialize(function()
+  openspace.removeSceneGraphNode(Node)
+end)

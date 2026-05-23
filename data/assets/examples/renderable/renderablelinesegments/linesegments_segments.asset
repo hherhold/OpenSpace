@@ -1,0 +1,30 @@
+-- Separate Segments
+-- This example creates separate, straight line segments from a CSV file. No line
+-- identifier column is specified, so every consecutive pair of rows is interpreted as
+-- one independent line segment.
+
+local Node = {
+  Identifier = "RenderableLineSegments_Example_Segments",
+  Renderable = {
+    Type = "RenderableLineSegments",
+    File = asset.resource("data/segments.csv"),
+    Unit = "pc",
+    Coloring = {
+      FixedColor = { 1.0, 0.6, 0.2 }
+    },
+    LineWidth = 2.0
+  },
+  GUI = {
+    Name = "RenderableLineSegments - Separate Segments",
+    Path = "/Examples"
+  }
+}
+
+
+asset.onInitialize(function()
+  openspace.addSceneGraphNode(Node)
+end)
+
+asset.onDeinitialize(function()
+  openspace.removeSceneGraphNode(Node)
+end)

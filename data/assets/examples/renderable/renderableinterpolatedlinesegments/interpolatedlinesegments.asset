@@ -1,0 +1,38 @@
+-- Basic
+-- This example creates a set of lines that support interpolation. The dataset contains
+-- 9 line vertices that are repeated for 3 different time steps, so that every 9th row
+-- represents a new position for a vertex at a step in the interpolation.
+--
+-- Use the "Value" property under "Interpolation" to morph the lines between the time
+-- steps, or trigger one of the interpolation actions.
+
+local Node = {
+  Identifier = "RenderableInterpolatedLineSegments_Example",
+  Renderable = {
+    Type = "RenderableInterpolatedLineSegments",
+    File = asset.resource("data/interpolation_lines.csv"),
+    -- Group consecutive rows with the same value in the "line" column into polylines
+    LineIdentifierColumn = "line",
+    -- The number of line vertices per time step. The dataset consists of 9 vertices at
+    -- 3 different time steps. This information is required
+    NumberOfObjects = 9,
+    Unit = "pc",
+    Coloring = {
+      FixedColor = { 0.4, 0.8, 1.0 }
+    },
+    LineWidth = 2.0
+  },
+  GUI = {
+    Name = "RenderableInterpolatedLineSegments - Basic",
+    Path = "/Examples"
+  }
+}
+
+
+asset.onInitialize(function()
+  openspace.addSceneGraphNode(Node)
+end)
+
+asset.onDeinitialize(function()
+  openspace.removeSceneGraphNode(Node)
+end)
