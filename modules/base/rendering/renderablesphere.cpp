@@ -231,8 +231,9 @@ Documentation RenderableSphere::Documentation() {
     );
 }
 
-RenderableSphere::RenderableSphere(const ghoul::Dictionary& dictionary)
-    : Renderable(dictionary)
+RenderableSphere::RenderableSphere(const ghoul::Dictionary& dictionary,
+                                   RenderableSettings settings)
+    : Renderable(dictionary, std::move(settings))
     , _size(SizeInfo, 1.f, 0.f, 1e25f)
     , _segments(SegmentsInfo, 16, 4, 1000)
     , _orientation(OrientationInfo)
@@ -470,7 +471,7 @@ void RenderableSphere::render(const RenderData& data, RendererTasks&) {
     _shader->setUniform("usingTransferFunction", _useColorMap);
     _shader->setUniform("transferFunction", transferFunctionUnit);
     _shader->setUniform("dataMinMaxValues", _dataMinMaxValues);
-    if (_useColorMap) {
+    if (_useColorMap && _transferFunction) {
         transferFunctionUnit.bind(_transferFunction->texture());
     }
 

@@ -358,6 +358,7 @@ std::vector<Documentation> BaseModule::documentations() const {
 
 std::vector<LuaLibrary> BaseModule::luaLibraries() const {
     return {
+        RenderableModel::luaLibrary(),
         ScreenSpaceDashboard::luaLibrary()
     };
 }
