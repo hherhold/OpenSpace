@@ -13,7 +13,6 @@ local Node = {
     File = asset.resource("data/interpolation_lines.csv"),
     LineIdentifierColumn = "line",
     NumberOfObjects = 9,
-    Unit = "pc",
     Coloring = {
       ColorMapping = {
         File = colormaps.Uniform.Viridis,

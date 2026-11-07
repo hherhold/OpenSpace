@@ -13,7 +13,6 @@ local Node = {
     Type = "RenderableLineSegments",
     File = asset.resource("data/lines.csv"),
     LineIdentifierColumn = "line",
-    Unit = "pc",
     Coloring = {
       ColorMapping = {
         File = colormaps.Uniform.Viridis,

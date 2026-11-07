@@ -8,7 +8,6 @@ local Node = {
   Renderable = {
     Type = "RenderableLineSegments",
     File = asset.resource("data/segments.csv"),
-    Unit = "pc",
     Coloring = {
       FixedColor = { 1.0, 0.6, 0.2 }
     },

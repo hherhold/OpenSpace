@@ -16,7 +16,6 @@ local Node = {
     -- The number of line vertices per time step. The dataset consists of 9 vertices at
     -- 3 different time steps. This information is required
     NumberOfObjects = 9,
-    Unit = "pc",
     Coloring = {
       FixedColor = { 0.4, 0.8, 1.0 }
     },

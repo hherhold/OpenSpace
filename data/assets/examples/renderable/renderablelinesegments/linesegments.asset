@@ -10,7 +10,6 @@ local Node = {
     File = asset.resource("data/lines.csv"),
     -- Group consecutive rows with the same value in the "line" column into polylines
     LineIdentifierColumn = "line",
-    Unit = "pc",
     Coloring = {
       FixedColor = { 0.4, 0.8, 1.0 }
     },
